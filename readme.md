@@ -4,7 +4,7 @@
 
 This repo is a concise summary and replacement of the [S3 Masterclass](https://acloud.guru/learn/s3-masterclass) tutorial by "A Cloud Guru".
 
-- [Chapter 2 - The Basics of S3](#Chapter-2-the-basics-of-s3)
+- [Chapter 2 - The Basics of S3](#Chapter-2---the-basics-of-s3)
 - [Chapter 3 - Security: Access Control](#Chapter-3-security-access-control)
 - [Chapter 4 - Security: Logging and Monitoring](#Chapter-4-security-logging-and-monitoring)
 - [Chapter 5 - Security: Data Protection](#Chapter-5-security-data-protection)
@@ -315,7 +315,7 @@ Or you can have KMS supply the keys (you get the keys using AWS SDK to make an A
 ### S3 Encryption Lab
 
 - __Are KMS keys global or region-specific?__ - (4:40) region specific.
-- __Are s3 objects accessible by HTTP or HTTPS?__ - (16:50) both HTTP and HTTPS. You can enforce HTTPS access only by using a bucket policy.
+- __Are s3 objects accessible by HTTP or HTTPS?__ - (16:50) both HTTP and HTTPS. You can enforce HTTPS access only by using a bucket policy. (Near end of course, it's mentioned static websites hosted on s3 are HTTP only, unless you use CloudFront for HTTPS)
 
 ### Versioning
 
