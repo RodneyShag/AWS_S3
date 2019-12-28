@@ -2,16 +2,17 @@
     <img src="images/s3_logo.jpg">
 </p>
 
-This repo is a concise summary and replacement of the [S3 Masterclass](https://acloud.guru/learn/s3-masterclass) tutorial by "A Cloud Guru" in February 2017.
+This repo is a concise summary and replacement of the [S3 Masterclass](https://acloud.guru/learn/s3-masterclass) tutorial by "A Cloud Guru".
 
-- [Chapter 2](#Chapter-2-the-basics-of-s3)
-- [Chapter 3](#Chapter-3-security-access-control)
-- [Chapter 4](#Chapter-4-security-logging-and-monitoring)
-- [Chapter 5](#Chapter-5-security-data-protection)
-- [Chapter 6](#Chapter-6-lifecycle-management)
-- [Chapter 7](#Chapter-7-event-notifications)
-- [Chapter 8](#Chapter-8-performance-optimization)
-- [Chapter 9](#Chapter-9-website-hosting)
+- [Chapter 2 - The Basics of S3](#Chapter-2-the-basics-of-s3)
+- [Chapter 3 - Security: Access Control](#Chapter-3-security-access-control)
+- [Chapter 4 - Security: Logging and Monitoring](#Chapter-4-security-logging-and-monitoring)
+- [Chapter 5 - Security: Data Protection](#Chapter-5-security-data-protection)
+- [Chapter 6 - Lifecycle Management](#Chapter-6-lifecycle-management)
+- [Chapter 7 - Event Notifications](#Chapter-7-event-notifications)
+- [Chapter 8 - Performance Optimization](#Chapter-8-performance-optimization)
+- [Chapter 9 - Website Hosting](#Chapter-9-website-hosting)
+
 
 # Chapter 2 - The Basics of S3
 
@@ -289,17 +290,21 @@ User in different AWS account than bucket or object
     1. to decrypt the data, you must supply the key again
 
 SSE-S3 or SSE-KMS:
+
 ![Server-side Encryption](images/serverSideEncryption.png)
 
 SSE-C:
+
 ![SSE-C](images/ssec.png)
 
 - __What is client-side encryption?__ (13:15) - It's when you encrypt your data on the client, then upload that encrypted data to s3. In this case, server-side encryption isn't needed.
 
 You can keep track of your keys yourself:
+
 ![Client-side Encryption](images/clientSideEncryption.png)
 
-Or you can have KMS supply the keys (you get the keys using AWS SDK to make an API call to KMS)
+Or you can have KMS supply the keys (you get the keys using AWS SDK to make an API call to KMS):
+
 ![Client-side Encryption](images/clientSideEncryptionWithKMS.png)
 
 - __How encrypt data in transit?__ - (16:25)
@@ -428,6 +433,7 @@ __What are 5 things that can serve as CloudFront origin?__ (7:05) s3 bucket, EC2
 
 ![Performance Optimizations](images/PerformanceOptimizations.png)
 
+
 # Chapter 9 - Website Hosting
 
 ### Static Website Hosting
@@ -443,10 +449,9 @@ __What are 5 things that can serve as CloudFront origin?__ (7:05) s3 bucket, EC2
 
 - __How enable CORS for s3 bucket__ - (10:15) Simple. Go to s3 bucket that we're trying to get data from, click Permissions -> CORS, and add a bucket policy (with custom code).
 
-# Chapter 10 - Practical Uses of S3
-
-skip this chapter - just shows how to use a specific non-AWS tool (CloudBerry).
 
 # References
 
-Repo is based on [S3 Masterclass](https://acloud.guru/learn/aws-lambda) tutorial by "A Cloud Guru" in February 2017 - An amazing course. The encryption part of this course was excellent!
+- Repo is based on [S3 Masterclass](https://acloud.guru/learn/aws-lambda) tutorial by "A Cloud Guru" - an amazing course.
+  - The encryption part of this course was excellent!
+  - Skip chapter 10 since it just shows how to use a specific non-AWS tool (CloudBerry).
