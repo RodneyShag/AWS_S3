@@ -252,6 +252,8 @@ User in different AWS account than bucket or object
     - `Specific operation(s): CreateBucket`
   1. Create a "CloudWatch Rule" that will tie the "CloudWatch Event" to a Lambda function (that will delete the created bucket).
 
+"Chapter 7 - Event Notifications" shows a simpler workflow for responding to sending notifications based on actions done in s3.
+
 
 # Chapter 5 - Security: Data Protection
 
@@ -393,52 +395,113 @@ Or you can have KMS supply the keys (you get the keys using AWS SDK to make an A
 - __What is Storage Class Analysis?__ - (0:20) a feature in s3 that, on a bucket/prefix/tags/etc. runs for 30+ days, then gives you detailed charts of how frequently that data is being accessed. It will also make a recommendation for you for which storage tier to use.
   - I prefer the new `INTELLIGENT_TIERING` storage class to automatically move data around storage classes for me, instead of just getting recommendations from "Storage Class Analysis" and spending time analyzing them.
 
+
 # Chapter 7 - Event Notifications
 
 ### Event Notifications
 
-- __What is an example of an Event Notification__ - Adding a new object to s3 is an example event. A notification configuration in the bucket can publish events to a destination.
-
+- __What is an example of an Event Notification__ - (0:10) Adding a new object to s3 is an example event. A notification configuration in the bucket can publish events to a destination.
+- __What's the difference between these event notifications, and the CloudTrail -> S3 -> CloudWatch -> SNS flow we saw in Chapter 4?__ - (1:15) these event notifications are a bucket-level feature and are near real-time. The CloudTrail flow was for the whole of s3.
 ![Event Notifications](images/EventNotifications.png)
 
-- __Where are 2 places you can add trigger for s3 to send event notification to Lambda?__ - (8:20) in Lambda, or (12:40) in s3.
+### Event Notifications Lab
+
+- __Where are 2 places you can add the trigger for s3 to send event notification to Lambda?__
+  - (8:20) in Lambda (preferred), or
+  - (12:10) in s3.
 
 
 # Chapter 8 - Performance Optimization
 
+### S3 Performance Optimisation
+
+- __What are s3's performance numbers?__ - (0:25) per prefix, s3 has
+  - At least 3500 PUT/COPY/POST/DELETE requests per second, and
+  - At least 5500 GET/HEAD requests per second
+- __How can you scale s3's performance?__ - (1:00) Since requests are _per prefix_, you can scale out horizontally by using more prefixes. You can download from 5 prefixes in parallel to get 5500 * 5=27500 requests per second.
+
+![Scale S3 Prefixes](images/scaleS3Prefixes.png)
+
+- __What if you can't get 27,500 requests/second due to EC2?__ - (2:25) Add another EC2 instance (see image below)
+
+![Scale EC2 Intances](images/scalingEC2s.png)
+
+- __How can you minimize s3 latency?__ - (3:55) Place s3 buckets near to AWS services (such as an EC2 that it's interacting with) or end users.
+- __How can you minimize s3 latency if your users are global?__ - (5:10) If we have global users, using a particular region doesn't give much of an advantage. Use "Transfer Acceleration" to reduce latency to s3 over large distances.
+- __How can you scale horizontally if forced to use 1 prefix?__ - (7:30) Since s3 is not a single endpoint, you can still upload/download in a multithreaded way.
+  - (8:10) For PUTS, use Multi-part upload. Can split an object into 10 portions and upload those in parallel.
+  - (8:35) For GETS, use Range-based GETS. Can split the object into 10 portions and download 10 different pieces of it in parallel.
+  - (8:55) For LISTS (that list objects in a bucket), you have 3 options
+    - You can parallelize the lists by making multiple requests at the same time (such as one LIST for JPG, and one for MP4)
+    - Instead of directly querying s3, can store secondary index of the object (such as on metadata or timestamp column) in DynamoDB, RDS, ElasticSearch/CloudSearch, or a database on EC2. Then your queries will have a faster query time than the s3 LIST command
+    - Can use "S3 Storage Inventory" to retrieve a list of your s3 objects periodically (daily or weekly) and store them in a CSV file. Instead of running a LIST command, you can just download that CSV file. (Demoed in "S3 Inventory Lab" section)
+- __How else can you minimize latency?__
+  - (5:20) Cache frequently accessed content, using a Content Delivery Network such as CloudFront. This CDN in front of s3 will cache the content at an "edge location" that sits close to your users.
+  - (6:00) Use an in-memory cache such as AWS Elasticache
+  - (6:10) Use AWS Elemental MediaStore to cache video content
+  - (6:25) Implement retries with exponential backoff in case you're getting "503 - Service Unavailable" errors due to making lots of requests.
+  - (10:00) Use latest SDKs and CLIs (since they are usually faster)
+  - (10:40) Be aware of KMS Key Limits, as you may hit KMS throttling prior to s3 throttling
+
 ### An Introduction to CloudFront
 
-__What are 5 things that can serve as CloudFront origin?__ (7:05) s3 bucket, EC2 instance (that may have a web server), Elastic Load Balancer (that may front an EC2 instance or Route53 endpoint), Route 53 endpoint, or an external system.
+- __What is CloudFront?__ - (0:35) a global Content Delivery Network (CDN) service that accelerates delivery of your websites, APIs, video content or other web assets.
+- __How does CDN reduce Latency?__ (1:10) See image below. The first time a user accesses the edge location in Sydney, there is no speed increase, as the file has to be downloaded from Virginia first. The next time any user needs that same data, that data will be sitting & cached in Sydney, and since it's closer to the user, it can be downloaded faster.
+
+![Edge Location Sydney](images/edgeLocationSydney.png)
+
+- __What are 5 things that can serve as a CloudFront "origin" (the location of where the original data is stored)?__ (6:55)
+  - s3 bucket
+  - EC2 instance (that may have a web server)
+  - Elastic Load Balancer (that may front an EC2 instance or Route53 endpoint)
+  - Route 53 endpoint
+  - An external system.
+- __What is an edge location?__ - (7:35) the location your content will be cached
+- __How long does data stay in an edge location?__ - (7:50) the data expires after a default Time To Live (TTL) of 24 hours, and then is removed. This ensures the data is never too out of date.
+- __Can you remove objects from the edge location?__ - (8:00) Yes, you can remove (invalidate) them before the TTL, but you will be charged. This is useful if you need to put more up-to-date data into the edge location.
+- __Does CloudFront support static (such as images) or dynamic content (such as Java code, Ruby, Python)?__ - (8:25) It supports both
+- __What are 2 types of CloudFront distributions?__  (8:55)
+  - Web distributions - used for websites
+  - RTMP - Used for media streaming
 
 ### Transfer Acceleration
 
-- __For selecting region for s3, it should be close to what 2 things?__ (0:45) proximity to users, and proximity to our AWS resources (such as our EC2 instances)
-- __Is transfer acceleration same as CloudFront?__ - (5:00) No. It just uses the CloudFront network. So, there is no caching, and we're not creating a CloudFront distribution.
+- __What is "S3 Transfer Acceleration"?__ - (2:20) It uses AWS Edge Locations to speed up GETS and PUTS for objects in your bucket. As data arrives at an AWS Edge Location, it is routed to your S3 bucket over an optimized network path (that is faster than the internet)
 
-### Transfer Acceleration Lab
+- __If a user in New Zealand wants to upload data to Virginia, what's different in the network if S3 Transfer Acceleration is used?__ - (3:40)
 
-- __After enabling transfer acceleration, how do u use it?__ - (1:10) You're given a new (URL) endpoint that you can use for GET/PUT requests.
+Without S3 Transfer Acceleration, a user uploads their object through the _internet_ to a bucket in Virginia (blue arrow):
 
-### Choosing an S3 Naming Scheme
+![S3 Transfer Acceleration Off](images/s3TransferAccelerationOff.png)
 
-- __Why does name of keys (filenames) in s3 matter?__ - (My summary) s3 hashes them and puts them in partitions. If all your filenames start the same (such as 2019-), then they will all get hashed to the same partition, and it will cause s3 to slow down.
-- __What are 3 ways to solve above problem?__
-  1. Can hash the file names. (i hate it, ruins filenames)
-  1. Use a short hash to prepend the name (2nd least hated solution)
-  1. Can use prefixes (folders) and put files in there. (my least hated solution)
+With S3 Transfer Accleration, the user only uses the _internet_ to upload their object to the edge location in Sydney (blue arrow). Then S3 Transfer Acceleration is going to use an optimized network path to upload it to s3 bucket in Virginia (big red arrow):
+
+![S3 Transfer Acceleration Off](images/s3TransferAccelerationOn.png)
+
+- __Is S3 Transfer Acceleration same as CloudFront?__ - (5:00) No. It's not CloudFront. It just uses the CloudFront network of edge locations. There is no caching, and we're not creating a CloudFront distribution.
+- __Is transfer acceleration free?__ (5:55) No.
+- __After enabling transfer acceleration, how do you use it?__ - (6:00) You're given a new (URL) endpoint that you can use for transfer accelerated GET/PUT requests.
 
 ### Optimizing S3 PUTS, GETS, & LISTS
 
-- __How optimize PUTS, GETS, LISTS?__ - see image below.
+- __Other than parallelization, what's another benefit for multi-part uploads?__ - (1:50) Increased resiliency: If you get a network error, you only need to reupload the parts that fail
+- __What's the best way to know how many parts to break a file into before uploading?__ (2:30)
+  - As a rule of thumb, use 25-50MB on higher bandwidth networks, 10MB on mobile networks
+  -  Try different sizes, and see what works best.
 
-![Performance Optimizations](images/PerformanceOptimizations.png)
+### Multipart Upload Lab
+
+- __Is multi-part upload done by default in CLI?__ - (1:10) Yes! For objects larger than 8 MB in size, it splits them into 8 MB chunks and uploads them in parallel.
 
 
 # Chapter 9 - Website Hosting
 
 ### Static Website Hosting
 
-- __How make DYNAMIC website with s3?__ - (~2:20) Static content on s3. API Gateway will call Lambda functions for dynamic stuff.
+- __What are examples of static content?__ - (0:35) client side content such as HTML, CSS, Javascript.
+- __What are examples of dynamic content?__ - (0:45) ruby, java, php.
+- __How can you make a serverless DYNAMIC website with s3?__ - (1:45) Static content on s3. API Gateway will call Lambda functions for dynamic code.
+- __URLs for buckets being used as websites are lengthy. What service can you use to get custom domain names?__ - (3:00) Route53. Can point the domain root to the S3 bucket.
 - __How do HTTPS with static website?__ - (6:00) Put CloudFront in front of website. Users will use CloudFront as https, and CloudFront will talk to origin using HTTP.
 
 ### Static Website Hosting Lab
