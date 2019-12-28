@@ -2,7 +2,7 @@
     <img src="images/s3_logo.jpg">
 </p>
 
-This repo is a concise summary and replacement of the [S3 Masterclass](https://acloud.guru/learn/s3-masterclass) tutorial by "A Cloud Guru".
+This repo is a concise summary and replacement of the [S3 Masterclass](https://acloud.guru/learn/s3-masterclass) tutorial by _A Cloud Guru_.
 
 - [The Basics of S3](#Chapter-2---the-basics-of-s3)
 - [Security: Access Control](#Chapter-3---security-access-control)
@@ -402,7 +402,8 @@ Or you can have KMS supply the keys (you get the keys using AWS SDK to make an A
 
 - __What is an example of an Event Notification__ - (0:10) Adding a new object to s3 is an example event. A notification configuration in the bucket can publish events to a destination.
 - __What's the difference between these event notifications, and the CloudTrail -> S3 -> CloudWatch -> SNS flow we saw in Chapter 4?__ - (1:15) these event notifications are a bucket-level feature and are near real-time. The CloudTrail flow was for the whole of s3.
-![Event Notifications](images/EventNotifications.png)
+
+![Event Notifications](images/eventNotifications.png)
 
 ### Event Notifications Lab
 
