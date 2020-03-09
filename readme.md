@@ -12,7 +12,7 @@ This repo is a concise summary and replacement of the [S3 Masterclass](https://a
 - [Event Notifications](#Chapter-7---event-notifications)
 - [Performance Optimization](#Chapter-8---performance-optimization)
 - [Website Hosting](#Chapter-9---website-hosting)
-- [Custom Static Website Creation](custom-static-website-creation)
+- [Custom Static Website Creation](#custom-static-website-creation)
 
 # Chapter 2 - The Basics of S3
 
