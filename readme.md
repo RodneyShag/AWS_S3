@@ -494,19 +494,37 @@ With S3 Transfer Accleration, the user only uses the _internet_ to upload their 
 
 ### Static Website Hosting
 
+[Detailed documentation I found online](https://docs.aws.amazon.com/AmazonS3/latest/dev/website-hosting-custom-domain-walkthrough.html)
+
 - __What are examples of static content?__ (0:35) client side content such as HTML, CSS, Javascript.
 - __What are examples of dynamic content?__ (0:45) ruby, java, php.
 - __How can you make a serverless DYNAMIC website with s3?__ (1:45) Static content on s3. API Gateway will call Lambda functions for dynamic code.
-- __URLs for buckets being used as websites are lengthy. What service can you use to get custom domain names?__ (3:00) Route53. Can point the domain root to the S3 bucket.
-- __How do HTTPS with static website?__ (6:00) Put CloudFront in front of website. Users will use CloudFront as https, and CloudFront will talk to origin using HTTP.
+- __URLs for buckets being used as websites are lengthy. What service can you use to get custom domain names?__ (3:20) Route53. Can point the domain root to the S3 bucket.
+- __How do HTTPS with static website?__ (6:00) Put CloudFront in front of website. Users will connect to CloudFront using https, and CloudFront will talk to the s3 website using HTTP.
+- How get both `website.com` and `www.website.com` to work in browser? (7:47) Use a bucket level redirect
+    1. Create s3 bucket called `website.com`
+    1. Create s3 bucket called `www.website.com`
+    1. Create a bucket level redirect from `www.website.com` to `website.com`
+    1. For Route 53 domain name of `website.com`, create 2 aliases, one for `website.com`, and one for `www.website.com` (see image below)
+
+![Bucket Redirect](images/bucketRedirect.png)
+
+- Documentation I found online
+    - [Create s3 static website with custom domain name](https://docs.aws.amazon.com/AmazonS3/latest/dev/website-hosting-custom-domain-walkthrough.html)
+    - [Add HTTPS to s3 static website, by using CloudFront](https://aws.amazon.com/premiumsupport/knowledge-center/cloudfront-https-requests-s3)
+
 
 ### Static Website Hosting Lab
 
-- __How do redirects?__ (7:10) in s3 console under "Static Website Hosting", we can write XML code for redirects.
+- __How create redirect from 1 webpage to another?__ (7:45) in s3 console under "Static Website Hosting", we can write custom XML code for redirects.
 
 ### Cross-Origin Resource Sharing (CORS) Lab
 
-- __How do you enable CORS for s3 bucket?__ (10:15) Simple. Go to s3 bucket that we're trying to get data from, click Permissions -> CORS, and add a bucket policy (with custom code).
+- __What is CORS?__ (0:15) Defines a way for web apps that are loaded in one domain to access resources in another domain. These types of requests are blocked by default by the browser (as a security measure to prevent the loading of web resources without the owner's consent)
+
+### Cross-Origin Resource Sharing (CORS) Lab
+
+- __How do you enable CORS for s3 bucket, to allow a specific URL to get resources from this bucket?__ (10:15) Simple. Go to s3 bucket that we're trying to get data from, click Permissions -> CORS, and add a bucket policy that has the URL that you will allow to access your resources.
 
 
 # References
