@@ -508,7 +508,7 @@ With S3 Transfer Accleration, the user only uses the _internet_ to upload their 
 - Documentation I found online
   - [Create s3 static website with custom domain name](https://docs.aws.amazon.com/AmazonS3/latest/dev/website-hosting-custom-domain-walkthrough.html)
   - [Add HTTPS to s3 static website, by using CloudFront](https://aws.amazon.com/premiumsupport/knowledge-center/cloudfront-https-requests-s3)
-
+    - [Advanced: Forcing users to use CloudFront instead of s3 bucket](https://acloud.guru/forums/s3-masterclass/discussion/-LtK5FV6C5-6g84wrRKp/what_is_best_to_secure_an_s3_s)
 
 ### Static Website Hosting Lab
 
