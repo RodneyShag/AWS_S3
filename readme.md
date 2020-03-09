@@ -534,31 +534,31 @@ This section is not from the tutorial.
 
 The below images show the resources that were created for [www.edgarshaghoulian.com](http://www.edgarshaghoulian.com)
 
-## 1. s3 Buckets
+### 1. s3 Buckets
 
 Go to s3 to see buckets `edgarshaghoulian.com` and `www.edgarshaghoulian.com`
 
 ![s3 Buckets](images/s3Buckets.png)
 
-## 2. Hosted Zones
+### 2. Hosted Zones
 
 Go to Route 53. Click "Hosted Zones" to see `edgarshaghoulian.com` and `www.edgarshaghoulian.com`
 
 ![Hosted Zones](images/hostedZones.png)
 
-## 3. Hosted Zone Records
+### 3. Hosted Zone Records
 
 Click `edgarshaghoulian.com`, and click "Go to Record Sets" to open the 4 "Records"
 
 ![Route 53 Hosted Zones](images/hostedZoneRecords.png)
 
-## 4. Alias with WWW
+### 4. Alias with WWW
 
 Click on record that has `Name = edgarshaghoulian.com` and `Type = A`. On the right side of the screen, "Edit Record Set" with "Alias Target" will show up on the right side of the screen.
 
 ![Alias With WWW](images/aliasWithWWW.png)
 
-## 5. Alias without WWW
+### 5. Alias without WWW
 
 Click on record that has `Name = www.edgarshaghoulian.com` and `Type = A`. On the right side of the screen, "Edit Record Set" with "Alias Target" will show up.
 
