@@ -12,7 +12,7 @@ This repo is a concise summary and replacement of the [S3 Masterclass](https://a
 - [Event Notifications](#Chapter-7---event-notifications)
 - [Performance Optimization](#Chapter-8---performance-optimization)
 - [Website Hosting](#Chapter-9---website-hosting)
-
+- [Custom Static Website Creation](custom-static-website-creation)
 
 # Chapter 2 - The Basics of S3
 
@@ -501,17 +501,13 @@ With S3 Transfer Accleration, the user only uses the _internet_ to upload their 
 - __How can you make a serverless DYNAMIC website with s3?__ (1:45) Static content on s3. API Gateway will call Lambda functions for dynamic code.
 - __URLs for buckets being used as websites are lengthy. What service can you use to get custom domain names?__ (3:20) Route53. Can point the domain root to the S3 bucket.
 - __How do HTTPS with static website?__ (6:00) Put CloudFront in front of website. Users will connect to CloudFront using https, and CloudFront will talk to the s3 website using HTTP.
-- How get both `website.com` and `www.website.com` to work in browser? (7:47) Use a bucket level redirect
-    1. Create s3 bucket called `website.com`
-    1. Create s3 bucket called `www.website.com`
-    1. Create a bucket level redirect from `www.website.com` to `website.com`
-    1. For Route 53 domain name of `website.com`, create 2 aliases, one for `website.com`, and one for `www.website.com` (see image below)
+- __How get both `website.com` and `www.website.com` to work in browser?__ (7:47) Use a bucket level redirect. Practical example shown at [Static Website Created Resources](static-website-created-resources)
 
 ![Bucket Redirect](images/bucketRedirect.png)
 
 - Documentation I found online
-    - [Create s3 static website with custom domain name](https://docs.aws.amazon.com/AmazonS3/latest/dev/website-hosting-custom-domain-walkthrough.html)
-    - [Add HTTPS to s3 static website, by using CloudFront](https://aws.amazon.com/premiumsupport/knowledge-center/cloudfront-https-requests-s3)
+  - [Create s3 static website with custom domain name](https://docs.aws.amazon.com/AmazonS3/latest/dev/website-hosting-custom-domain-walkthrough.html)
+  - [Add HTTPS to s3 static website, by using CloudFront](https://aws.amazon.com/premiumsupport/knowledge-center/cloudfront-https-requests-s3)
 
 
 ### Static Website Hosting Lab
@@ -525,6 +521,48 @@ With S3 Transfer Accleration, the user only uses the _internet_ to upload their 
 ### Cross-Origin Resource Sharing (CORS) Lab
 
 - __How do you enable CORS for s3 bucket, to allow a specific URL to get resources from this bucket?__ (10:15) Simple. Go to s3 bucket that we're trying to get data from, click Permissions -> CORS, and add a bucket policy that has the URL that you will allow to access your resources.
+
+# Custom Static Website Creation
+
+This section is not from the tutorial.
+
+1. I purchased `edgarshaghoulian.com` from Route 53.
+1. I created an s3 bucket called `edgarshaghoulian.com`
+1. I created an s3 bucket called `www.edgarshaghoulian.com`
+1. I created a bucket level redirect from `www.edgarshaghoulian.com` to  `edgarshaghoulian.com`
+1. For Route 53 domain name of edgarshaghoulian.com, I created 2 aliases, one for `edgarshaghoulian.com`, and one for `www.edgarshaghoulian.com`
+
+The below images show the resources that were created for [www.edgarshaghoulian.com](http://www.edgarshaghoulian.com)
+
+## 1. s3 Buckets
+
+Go to s3 to see buckets `edgarshaghoulian.com` and `www.edgarshaghoulian.com`
+
+![s3 Buckets](images/s3Buckets.png)
+
+## 2. Hosted Zones
+
+Go to Route 53. Click "Hosted Zones" to see `edgarshaghoulian.com` and `www.edgarshaghoulian.com`
+
+![Hosted Zones](images/hostedZones.png)
+
+## 3. Hosted Zone Records
+
+Click `edgarshaghoulian.com`, and click "Go to Record Sets" to open the 4 "Records"
+
+![Route 53 Hosted Zones](images/hostedZoneRecords.png)
+
+## 4. Alias with WWW
+
+Click on record that has `Name = edgarshaghoulian.com` and `Type = A`. On the right side of the screen, "Edit Record Set" with "Alias Target" will show up on the right side of the screen.
+
+![Alias With WWW](images/aliasWithWWW.png)
+
+## 5. Alias without WWW
+
+Click on record that has `Name = www.edgarshaghoulian.com` and `Type = A`. On the right side of the screen, "Edit Record Set" with "Alias Target" will show up.
+
+![Alias Without WWW](images/aliasWithoutWWW.png)
 
 
 # References
