@@ -274,20 +274,20 @@ Instead of `CloudTrail -> action in S3 -> CloudWatch -> SNS`, "Chapter 7 - Event
 
 - __How does server-side encryption for s3 work?__ (7:00) s3 encrypts your data before writing it to disk, and decrypts it when your data is read from disk.
 - __What are 3 types of server-side encryption?__ See images below
-  1. _SSE-S3_ - Free. s3 handles all keys (Data Key, Master Key) for you using AES-256 encryption
+  - _SSE-S3_ - Free. s3 handles all keys (Data Key, Master Key) for you using AES-256 encryption
     - Each object is encrypted with a unique data key.
     - The data key is encrypted by a master key
     - Master key is automatically rotated monthly
-  1. _SSE-KMS_ - Not free. Keys are managed in AWS Key Management Service (KMS) with a lot more control, outside of s3.
+  - _SSE-KMS_ - Not free. Keys are managed in AWS Key Management Service (KMS) with a lot more control, outside of s3.
     - Not free.
     - Keys can be used across AWS Services (not just s3).
     - User creates, controls, and rotates master keys.
     - Uses AES-256 encryption
     - Every use of KMS is logged in CloudTrail (unlike SSE-S3 keys)
-  1. _SSE-C_ - Free. You (the customer) provide the keys. Encryption is AES-256. You must use HTTPS to upload objects.
-    1. The symmetric key is upload with the data
-    1. s3 encrypts the data with the key, then deletes the key
-    1. to decrypt the data, you must supply the key again
+  - _SSE-C_ - Free. You (the customer) provide the keys. Encryption is AES-256. You must use HTTPS to upload objects.
+    - The symmetric key is upload with the data
+    - s3 encrypts the data with the key, then deletes the key
+    - to decrypt the data, you must supply the key again
 
 SSE-S3 or SSE-KMS:
 
