@@ -283,7 +283,7 @@ Instead of `CloudTrail -> action in S3 -> CloudWatch -> SNS`, "Chapter 7 - Event
     - Keys can be used across AWS Services (not just s3).
     - User creates, controls, and rotates master keys.
     - Uses AES-256 encryption
-    - Every use of KMS is logged in CloudTrail
+    - Every use of KMS is logged in CloudTrail (unlike SSE-S3 keys)
   1. _SSE-C_ - Free. You (the customer) provide the keys. Encryption is AES-256. You must use HTTPS to upload objects.
     1. The symmetric key is upload with the data
     1. s3 encrypts the data with the key, then deletes the key
@@ -308,14 +308,41 @@ Or you can have KMS supply the keys (you get the keys using the AWS SDK to make 
 ![Client-side Encryption](images/clientSideEncryptionWithKMS.png)
 
 - __What are 2 ways to encrypt data in transit?__ (16:25)
-  - (16:40) Use client-side encryption, so data is encrypted before upload
-  - (17:00) Use SSL (HTTPS). You can actually enforce this using a bucket policy
+  - (16:40) For uploading to s3, use client-side encryption, so data is encrypted before upload
+  - (17:00) For both uploading and getting data from s3, you can use SSL (HTTPS). You can  enforce HTTPS (instead of HTTP) using a bucket policy.
 - __What is difference between HTTP and HTTPS?__ (17:10) HTTP is unencrypted. HTTPS is encrypted using assymetric encryption (public/private keys)
+- __Are objects in s3 accessible by HTTP or HTTPS?__ - (17:20) both, by default.
 
-### S3 Encryption Lab
+### Server Side Encryption with KMS Managed Keys Lab
 
-- __Are KMS keys global or region-specific?__ (4:40) region specific.
-- __Are s3 objects accessible by HTTP or HTTPS?__ (16:50) both HTTP and HTTPS. You can enforce HTTPS access only by using a bucket policy. (Near end of course, it's mentioned static websites hosted on s3 are HTTP only, unless you use CloudFront for HTTPS)
+- __How does KMS encryption work?__ (0:15)
+  1. Create a Customer Master Key in KMS
+  1. Call KMS to get that key as
+    - Plaintext
+    - Encrypted
+  1. Use the Plaintext Data Key to encrypt the PlainText into CipherText
+  1. Store the Ciphertext and Encrypted Data Key, both in the s3 bucket.
+
+![KMS Encryption](images/kmsEncryption.png)
+
+- __How does KMS decryption work?__ (1:56)
+    1. Retrieve the encrypted key from the s3 bucket.
+    1. Make a call to KMS to decrypt that data key to get the "Plaintext Data Key"
+    1. Use the "Plaintext Data Key" to convert the CipherText to Plaintext
+
+![KMS Decrypt](images/kmsDecryption.png)
+
+- __What are two types of "Customer Master Keys?"__ (3:05)
+  1. Customer Managed - Not free. You get much more control over your key
+  1. AWS Managed - Free, generated for you.
+- __Are KMS keys region specific or global?__ (8:15) Region specific.
+- __What are 2 reasons somebody would use a Customer Managed key?__ (9:50)
+  1. It lets you set the key's bucket policy
+  1. You can set a custom rotation schedule
+
+### Server Side Encryption with Customer-Provided Keys Lab
+
+- __For Customer-Provided keys, for encryption & decryption, do you use AWS Console, CLI, or both?__ (0:20) You must use the CLI. You can't do it through the AWS Console
 
 ### Versioning
 
