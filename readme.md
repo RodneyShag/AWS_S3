@@ -316,19 +316,19 @@ Or you can have KMS supply the keys (you get the keys using the AWS SDK to make 
 ### Server Side Encryption with KMS Managed Keys Lab
 
 - __How does KMS encryption work?__ (0:15)
-  1. Create a Customer Master Key in KMS
-  1. Call KMS to get that key as
-    - Plaintext
-    - Encrypted
-  1. Use the Plaintext Data Key to encrypt the PlainText into CipherText
-  1. Store the Ciphertext and Encrypted Data Key, both in the s3 bucket.
+    1. Create a Customer Master Key in KMS
+    1. Call KMS to get that key as
+        - Plaintext
+        - Encrypted
+    1. Use the Plaintext Data Key to encrypt the PlainText into CipherText
+    1. Store the Ciphertext and Encrypted Data Key, both in the s3 bucket.
 
 ![KMS Encryption](images/kmsEncryption.png)
 
 - __How does KMS decryption work?__ (1:56)
-    1. Retrieve the encrypted key from the s3 bucket.
-    1. Make a call to KMS to decrypt that data key to get the "Plaintext Data Key"
-    1. Use the "Plaintext Data Key" to convert the CipherText to Plaintext
+  1. Retrieve the encrypted key from the s3 bucket.
+  1. Make a call to KMS to decrypt that data key to get the "Plaintext Data Key"
+  1. Use the "Plaintext Data Key" to convert the CipherText to Plaintext
 
 ![KMS Decrypt](images/kmsDecryption.png)
 
