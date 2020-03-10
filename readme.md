@@ -245,11 +245,11 @@ User in different AWS account than bucket or object:
 ### CloudTrail & CloudWatch Events Lab
 
 - __What are CloudWatch events?__ (5:05) A feature that lets you respond to state changes in your AWS resources.
-  1. Create a "CloudWatch event" by providing:
+  - Create a "CloudWatch event" by providing:
     - `Service Name: S3`
     - `Event Type: Bucket Level Operations`
     - `Specific operation(s): CreateBucket`
-  1. Create a "CloudWatch Rule" that will tie the "CloudWatch Event" to a Lambda function (that will delete the created bucket).
+  - Create a "CloudWatch Rule" that will tie the "CloudWatch Event" to a Lambda function (that will delete the created bucket).
 
 Instead of `CloudTrail -> action in S3 -> CloudWatch -> SNS`, "Chapter 7 - Event Notifications" will show the simpler workflow of `action in S3 -> SNS`
 
