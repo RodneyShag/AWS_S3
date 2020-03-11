@@ -97,7 +97,7 @@ User in different AWS account than bucket or object:
 
 ![Policy Diagram](images/policy3.png)
 
-- __What are 3 thing ACLs can do that bucket policies can't do, or can't do well?__ (12:55)
+- __What are 3 things ACLs can do that bucket policies can't do, or can't do well?__ (12:55)
   - If a bucket has objects that are not owned by the bucket owner, then the bucket owner can't apply a bucket policy that applies to that object. The object's owner would need to use an ACL to manage access to that object.
   - Having different access for individual objects in a bucket. It's easier to do this with an ACL than a bucket policy.
   - Grant access to the _Predefined Group_ of "S3 Log Delivery Group" on a bucket, so s3 can write access logs to a bucket.
@@ -171,7 +171,7 @@ User in different AWS account than bucket or object:
 
 ### Cross Account Access Using ACL's Lab
 
-- __If AWS Account A gives AWS Account BA access to its s3 buckets, how does Account B access the buckets?__ (2:15) the buckets won't magically show up in Account B's s3 dashboard. Account B must access Account A's buckets by using the command line.
+- __If AWS Account A gives AWS Account B access to its s3 buckets, how does Account B access the buckets?__ (2:15) the buckets won't magically show up in Account B's s3 dashboard. Account B must access Account A's buckets by using the command line.
 - __Using an ACL, how can Account A give Account B's user access to Account A's s3 bucket?__ (entire video)
   1. (6:35) Account A gives _entire_ Account B "read" access using an ACL (since ACLs cant give access to just one user in Account B)
   1. (11:35) Account B gives its user `s3:ListBucket` access using a User Policy.
@@ -210,7 +210,7 @@ User in different AWS account than bucket or object:
 ### S3 Access Logging
 
 - __What is "s3 access logging?"__ (0:00) it tracks requests for access to a bucket. It records access time, requestor IP, object key name, operation type, response codes, etc.
-- __Is bucket access logging enabled or disabled by default?__ (0:40) disabled by default
+- __Is bucket access logging enabled or disabled by default?__ (0:40) disabled by default.
 - __Are logs real-time?__ (1:05) No. Logs are periodically delivered. They're collected, consolidated, and then delivered.
 - __Where are s3 access logs saved?__ (1:30) to a target bucket you specify. Using a different bucket is usually a good idea for organizational purposes.
 - __Why enable s3 access logging?__ (3:20) for security and audit reasons, to help understand AWS bill, or to learn about customers.
@@ -317,9 +317,7 @@ Or you can have KMS supply the keys (you get the keys using the AWS SDK to make 
 
 - __How does KMS encryption work?__ (0:15)
   1. Create a Customer Master Key in KMS
-  1. Call KMS to get that key as
-    - Plaintext
-    - Encrypted
+  1. Call KMS to get that key in 2 versions: Plaintext, Encrypted
   1. Use the Plaintext Data Key to encrypt the PlainText into CipherText
   1. Store the Ciphertext and Encrypted Data Key, both in the s3 bucket.
 
@@ -327,9 +325,9 @@ Or you can have KMS supply the keys (you get the keys using the AWS SDK to make 
 
 
 - __How does KMS decryption work?__ (1:56)
-    1. Retrieve the encrypted key from the s3 bucket.
-    1. Make a call to KMS to decrypt that data key to get the "Plaintext Data Key"
-    1. Use the "Plaintext Data Key" to convert the CipherText to Plaintext
+  1. Retrieve the encrypted key from the s3 bucket.
+  1. Make a call to KMS to decrypt that data key to get the "Plaintext Data Key"
+  1. Use the "Plaintext Data Key" to convert the CipherText to Plaintext
 
 ![KMS Decrypt](images/kmsDecryption.png)
 
@@ -351,7 +349,7 @@ Or you can have KMS supply the keys (you get the keys using the AWS SDK to make 
 - __Is s3 versioning enabled or disabled by default?__ (0:45) disabled by default.
 - __Why wouldn't you enable versioning?__ (1:20) versioning can greatly increase storage costs
 - __How can you mitigate the versioning cost?__ (1:40) use lifecycle management to archive or delete old versions of data
-- __How can you prevent a hacker in your account from turning versioning off and deleting all files?__ (2:10) Use "Multi-factor Authentication (MFA) Delete", which can only be enabled by the root user. This only allows users that are Multi-factor authenticated to be able to:
+- __How can you make it harder for a hacker in your account from turning versioning off and deleting all files?__ (2:10) Use "Multi-factor Authentication (MFA) Delete", which can only be enabled by the root user. This only allows users that are Multi-factor authenticated to be able to:
   1. change the versioning state
   2. permanently delete an object version.
 - __(In an s3 bucket with versioning enabled), how are versions of an object stored?__ (5:00) Each version of the object will have a unique "version id". The most recent version id is labeled as the current version.
@@ -369,7 +367,7 @@ Or you can have KMS supply the keys (you get the keys using the AWS SDK to make 
 ### Cross Region Replication
 
 - __What is cross-region replication in s3?__ (0:10) When we copy our s3 data asynchronously to a bucket in another AWS region. A bucket-level feature.
-- __Name 2 reasons to do cross-region replication?__ (0:50) Latency decrease, disaster recovery
+- __Name 2 benefits of cross-region replication?__ (0:50) Latency decrease, disaster recovery
 - __What's 1 thing you can change for the copies that are made?__ (2:20) You can change the storage class in the destination bucket to use reduced redundancy.
 - __When replicating data, does the bucket have to be in the same AWS account?__ (2:50) No.
 - __When enabling cross-region replication, does it copy over everything to destination region?__ (3:10) No. Any objects created before enabling cross-region replication are not actually replicated
@@ -432,7 +430,7 @@ Or you can have KMS supply the keys (you get the keys using the AWS SDK to make 
 
 ### Event Notifications Lab
 
-- __Where are 2 places you can add the trigger for s3 to send event notification to Lambda?__
+- __Where are 2 locations you can add the trigger for s3 to send event notification to Lambda?__
   - (8:20) in Lambda (preferred), or
   - (12:10) in s3.
 
@@ -441,7 +439,7 @@ Or you can have KMS supply the keys (you get the keys using the AWS SDK to make 
 
 ### S3 Performance Optimisation
 
-- __What are s3's performance numbers?__ (0:25) per prefix, s3 has
+- __What are s3's performance numbers?__ (0:25) _per prefix_, s3 has
   - At least 3500 PUT/COPY/POST/DELETE requests per second, and
   - At least 5500 GET/HEAD requests per second
 - __How can you scale s3's performance?__ (1:00) Since requests are _per prefix_, you can scale out horizontally by using more prefixes. You can download from 5 prefixes in parallel to get 5500 * 5=27500 requests per second.
@@ -485,7 +483,7 @@ Or you can have KMS supply the keys (you get the keys using the AWS SDK to make 
 - __What is an edge location?__ (7:35) the location your content will be cached
 - __How long does data stay in an edge location?__ (7:50) the data expires after a default Time To Live (TTL) of 24 hours, and then is removed. This ensures the data is never too out of date.
 - __Can you remove objects from the edge location?__ (8:00) Yes, you can remove (invalidate) them before the TTL, but you will be charged. This is useful if you need to put more up-to-date data into the edge location.
-- __Does CloudFront support static (such as images) or dynamic content (such as Java code, Ruby, Python)?__ (8:25) It supports both
+- __Does CloudFront support static (such as images) or dynamic content (such as Java code, Ruby, Python)?__ (8:25) It supports both.
 - __What are 2 types of CloudFront distributions?__  (8:55)
   - Web distributions - used for websites
   - RTMP - Used for media streaming
@@ -529,8 +527,8 @@ With S3 Transfer Accleration, the user only uses the _internet_ to upload their 
 - __What are examples of dynamic content?__ (0:45) ruby, java, php.
 - __How can you make a serverless DYNAMIC website with s3?__ (1:45) Static content on s3. API Gateway will call Lambda functions for dynamic code.
 - __URLs for buckets being used as websites are lengthy. What service can you use to get custom domain names?__ (3:20) Route53. Can point the domain root to the S3 bucket.
-- __How do HTTPS with static website?__ (6:00) Put CloudFront in front of website. Users will connect to CloudFront using https, and CloudFront will talk to the s3 website using HTTP.
-- __How get both `website.com` and `www.website.com` to work in browser?__ (7:47) Use a bucket level redirect. Practical example shown at [Static Website Created Resources](static-website-created-resources)
+- __How can you have HTTPS work on static website?__ (6:00) Put CloudFront in front of website. Users will connect to CloudFront using https, and CloudFront will talk to the s3 website using HTTP.
+- __How get both `website.com` and `www.website.com` to work with static website (in the browser)?__ (7:47) Use a bucket level redirect. Practical example shown at [Static Website Created Resources](static-website-created-resources)
 
 ![Bucket Redirect](images/bucketRedirect.png)
 
@@ -549,7 +547,7 @@ With S3 Transfer Accleration, the user only uses the _internet_ to upload their 
 
 ### Cross-Origin Resource Sharing (CORS) Lab
 
-- __How do you enable CORS for s3 bucket, to allow a specific URL to get resources from this bucket?__ (10:15) Simple. Go to s3 bucket that we're trying to get data from, click Permissions -> CORS, and add a bucket policy that has the URL that you will allow to access your resources.
+- __How do you enable CORS for s3 bucket, to allow a specific URL to get resources from this bucket?__ (10:15) Simple, use a bucket policy. Go to s3 bucket that we're trying to get data from, click Permissions -> CORS, and add a bucket policy that has the URL that you will allow to access your resources.
 
 # Custom Static Website Creation
 
