@@ -183,6 +183,10 @@ User in different AWS account than bucket or object:
   1. (5:50 - 6:15) Account B gives its user "s3:ListBucket" access using a User Policy
 - __How can Account A enforce user in Account B to upload files to Account A's s3 bucket with `bucket-owner-full-control`?__ (2:35) You can use a "conditional" in the bucket policy (which is not possible with ACLs)
 
+### Cross Account Access (Additional Notes)
+
+I actually tried the ACL method, and bucket policy method, and neither worked. I had to do both together for cross-account access to work.
+
 ### Timed URL Lab
 
 - __What's a timed URL?__ (0:25) A URL (to a resource, such as a picture for example) that's only available for a certain amount of time (such as 1 day).
