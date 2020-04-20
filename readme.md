@@ -551,7 +551,7 @@ With S3 Transfer Accleration, the user only uses the _internet_ to upload their 
 
 ### Cross-Origin Resource Sharing (CORS) Lab
 
-- __How do you enable CORS for s3 bucket, to allow a specific URL to get resources from this bucket?__ (10:15) Simple, use a bucket policy. Go to s3 bucket that we're trying to get data from, click Permissions -> CORS, and add a bucket policy that has the URL that you will allow to access your resources.
+- __How do you enable CORS for s3 bucket, to allow a specific URL to get resources from this bucket?__ (10:15) In s3, go to "Permissions -> CORS Configuration", and for "AllowedOrigin", list the URL you want to whitelist for access to your s3 bucket.
 
 # Custom Static Website Creation
 
