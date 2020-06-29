@@ -601,3 +601,8 @@ Click on record that has `Name = www.edgarshaghoulian.com` and `Type = A`. On th
 - Repo is based on [S3 Masterclass](https://acloud.guru/learn/aws-lambda) tutorial by "A Cloud Guru" - an amazing course.
   - The encryption part of this course was excellent!
   - Skip chapter 10 since it just shows how to use a specific non-AWS tool (CloudBerry).
+
+# More resources
+
+- [AWS Certified Developer - Associate 2020](https://acloud.guru/learn/aws-certified-developer-associate) - Section: S3
+- [AWS Certified Solutions Architect - Associate 2020](https://acloud.guru/learn/aws-certified-solutions-architect-associate) - Section: Identity Access Management & S3
